@@ -1,10 +1,10 @@
 let lvlSelectionState = {
-    preload: loadAssets,
+    preload: loadLvlAssets,
     create: displayScreen};
 
 let btnLvl1, btnLvl2;
 
-function loadAssets(){
+function loadLvlAssets(){
     //meter assets para los botones y el fondo
 }
 //botones para elegir nivel

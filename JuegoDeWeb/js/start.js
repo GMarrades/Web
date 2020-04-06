@@ -1,14 +1,14 @@
-
+const velocidad_min; //velocidad minima para romper un bloque
 
 
 let initialState = {
-    preload: loadAssets,
+    preload: loadstartAssets,
     create: displayScreen
 };
 
 let btnPlayer, btnAbout, btnInstructions, btnLvl;
 
-function loadAssets(){
+function loadstartAssets(){
 
 }
 
