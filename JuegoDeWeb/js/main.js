@@ -28,7 +28,6 @@ function startGame() {
     //lo pongo por estetica y porque es solo poner un botón de más
     game.state.add('lvlSelection', lvlSelectionState);
     game.state.add('play', playState);
-
     game.state.start('start');
 }
 
