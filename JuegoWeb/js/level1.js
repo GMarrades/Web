@@ -14,11 +14,15 @@ const AUMENTO_VELOCIDAD_SUPERPOWERUP=0; //velocidad que aumentará el super powe
 
 let lvl1State = {
     preload: loadstartAssets,
-    create: displayScreen
+    create: displayScreen,
+    update: updateScene,
+    render: render
 };
 
 var style = { font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" };
-
+var pj;
+var group;
+var cursors;
 function loadstartAssets(){
     game.load.image('trampa', 'assets/imgs/trampa.png');
     game.load.image('obstaculo','assets/imgs/obstaculo.png');
@@ -29,9 +33,60 @@ function loadstartAssets(){
     game.load.image('superboost', 'assets/imgs/superboost.png');
 }
 
+function updateScene(){
+    //Deteccion de colision del jugador con algun objeto del grupo de los bloques
+     game.physics.arcade.collide(pj, group, null,collisionHandler, this);
+
+     //Movimiento
+     pj.body.velocity.x = 0;
+      if (cursors.left.isDown)
+    {
+        pj.body.velocity.x = -200;
+    }
+    else if (cursors.right.isDown)
+    {
+        pj.body.velocity.x = 200;
+    }
+}
 function displayScreen(){
+    game.physics.startSystem(Phaser.Physics.ARCADE);
     game.add.text(50, 50, " Level1",style);
 
+    //Creamos grupo
+     group = game.add.physicsGroup();
+
+     //Añadimos bloques al grupo
+     for (var i = 0; i < 550; i+=50)
+    {
+        var c = group.create(i, 450, 'normal');
+        
+    }
+
+    //Establecemos las fisicas
+    pj = game.add.sprite(0,0,"boost");
+    game.physics.enable([pj]);
+    pj.body.collideWorldBounds = true;
+    pj.body.bounce.y = 1;
+    pj.body.gravity.y = 500;
+    
+    //Los bloques son inamovibles
+    group.setAll('body.immovable', true);
+
+     cursors = game.input.keyboard.createCursorKeys();
+}
+function collisionHandler(obj,group){
+    //Si la velocidad es mayor que 500 rompemos el Bloque y disminuimos la velocidad
+   if(pj.body.velocity.y>500){
+           group.destroy();
+           pj.body.velocity.y -=700; 
+   
+   }
+   //Si no rebotamos
+   else if( pj.body.velocity.y <= 500) pj.body.velocity.y = +400;
+}
+
+function render(){
+    game.debug.bodyInfo(pj, 332, 32);
 }
 
 //Classe para crear plataformas
