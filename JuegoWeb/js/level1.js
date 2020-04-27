@@ -89,44 +89,14 @@ function render(){
     game.debug.bodyInfo(pj, 332, 32);
 }
 
-//Classe para crear plataformas
-class Plataforma{
-    constructor (){ //HAY QUE REESCRIBIR EL CONSTRUCTOR PARA ACEPTAR EL JSON, ESTÄ COMENTADO PARA USARLO EN UN POSIBLE LVL 3
-        /*var probabilidadDeHueco= PROBABILIDAD_AGUJERO; //variable para controlar que salgan huecos
-        this.bloques=[];                                //Array para guardar los bloques
-        for(var i=0; i<BLOQUES_POR_PLATAFORMA; i++){
-            var bloque;
-            var hueco = Math.random();                              //Dice roll para hueco
-            if(hueco <=probabilidadDeHueco){                        //Comprovación si ha salido hueco
-                probabilidadDeHueco = PROBABILIDAD_AGUJERO;         //reset de probabilidad en caso que si
-                var probDeBoost = Math.random();                    //Dice roll para boost
-                if(probDeBoost<=PROBABILIDAD_POWERUP){              //Comprovación de los powerups y asignación
-                    bloque = 2;
-                }
-                else{
-                    bloque = 0;
-                }
-            }
-            else{
-                probabilidadDeHueco += PROBABILIDAD_AGUJERO; //Se aumenta la probabilidad de hueco para que siempre haya almenos un agujero
-                var probabilidadDeTrampa = Math.random();    //Dice roll para trampa
-                if(probabilidadDeTrampa<=PROBABILIDAD_TRAMPA){
-                    bloque = -3;
-                }
-                else{
-                    var probabilidadObstaculo = Math.random();              //Dice roll por obstaculos
-                    if(probabilidadObstaculo<= PROBABILIDAD_OBSTACULO){
-                        bloque = -2;
-                    }
-                    else{
-                        bloque = 1;
-                    }
-                }
-            }
-            this.bloques.push(new Bloque(bloque));      //Poner nuevo bloque en array
-        }*/
-    }
-}
+//Leer del JSON para sacar los bloques
+let nivel = JSON.parse(Nivel1);
+ for (let i=0; i<nivel.length; i++){
+     let plataforma = JSON.parse(Nivel1[i+1]);
+     for(let j = 0; j<plataforma.length; j++){
+        bloque = new Bloque(plataforma[j]);
+     }
+ }
 
 //Clase para cada bloque en una plataforma.Tipo-3 trampa, tipo-2 = obstáculo, tipo-1 = bloque de letra,
 //tipo 0 = vacio, tipo 1 = bloque normal tipo 2= boost tipo 3 superboost.
