@@ -43,7 +43,7 @@ function loadstartAssets(){
 function updateScene(){
     //Deteccion de colision del jugador con algun objeto del grupo de los bloques
      game.physics.arcade.collide(pj, group, null,collisionHandler, this);
-    game.physics.arcade.collide(pj, trampa, colis,choque, this);
+     game.physics.arcade.collide(pj, trampa, colis,choque, this);
 
      //Movimiento
      pj.body.velocity.x = 0;
@@ -91,12 +91,7 @@ function displayScreen(){
      cursors = game.input.keyboard.createCursorKeys();
 }
 
-function colis(obj,group){
 
-    daño = pj.body.velocity.y/100;
-     recibirDaño(daño);
-
-}
 
 
 function collisionHandler(obj,group){
@@ -110,6 +105,14 @@ function collisionHandler(obj,group){
    //Si no rebotamos
    else if( pj.body.velocity.y <= 500) pj.body.velocity.y = +400;
 }
+
+function colis(obj,group){
+
+    daño = pj.body.velocity.y/100;
+     recibirDaño(daño);
+
+}
+
 function choque(obj,trampa){
     pj.body.velocity.y = +400;
 
