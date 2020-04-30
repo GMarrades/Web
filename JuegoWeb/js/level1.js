@@ -1,6 +1,6 @@
 const PROBABILIDAD_TRAMPA =0; //probabilidad de trampa en una plataforma
 const PROBABILIDAD_OBSTACULO=0; //probabilidad obstaculo en una plataforma
-const VIDA_MÁXIMA=0;
+const VIDA_MÁXIMA=4;
 const BLOQUES_POR_PLATAFORMA = 8;
 const MAX_PLATAFORMAS=0; //nº de plataformas para llegar al suelo
 const PROBABILIDAD_AGUJERO=1/BLOQUES_POR_PLATAFORMA; //probabilidad para un agujero en la plataforma
@@ -11,6 +11,7 @@ const PROBABILIDAD_SIN_AGUJEROS=0; //probabilidad para una plataforma sin agujer
 const PROBABILIDAD_LETRA=0; //probabilidad para un bloque de letras en una plataforma sin agujeros
 const PROBABILIDAD_SUPERPOWERUP=0; //probabilidad de que haya un super power up en un bloque
 const AUMENTO_VELOCIDAD_SUPERPOWERUP=0; //velocidad que aumentará el super power up
+
 
 let lvl1State = {
     preload: loadstartAssets,
@@ -23,6 +24,10 @@ var style = { font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", bou
 var pj;
 var group;
 var cursors;
+var vida;
+let downTween1;
+var vidaActual = 4;
+
 function loadstartAssets(){
     game.load.image('trampa', 'assets/imgs/trampa.png');
     game.load.image('obstaculo','assets/imgs/obstaculo.png');
@@ -31,6 +36,7 @@ function loadstartAssets(){
     game.load.image('normal', 'assets/imgs/normal.png');
     game.load.image('boost', 'assets/imgs/boost.png');
     game.load.image('superboost', 'assets/imgs/superboost.png');
+    game.load.image('vida','assets/imgs/BarraDeVida.png')
 }
 
 function updateScene(){
@@ -50,7 +56,11 @@ function updateScene(){
 }
 function displayScreen(){
     game.physics.startSystem(Phaser.Physics.ARCADE);
-    game.add.text(50, 50, " Level1",style);
+    game.add.text(25, 25, " Level1",style);
+    vida = game.add.sprite(170,40,"vida");
+    vida.anchor.setTo(0, 0.5);
+    
+        
 
     //Creamos grupo
      group = game.add.physicsGroup();
@@ -63,11 +73,12 @@ function displayScreen(){
     }
 
     //Establecemos las fisicas
-    pj = game.add.sprite(0,0,"boost");
+    pj = game.add.sprite(0,300,"boost");
     game.physics.enable([pj]);
     pj.body.collideWorldBounds = true;
     pj.body.bounce.y = 1;
     pj.body.gravity.y = 500;
+
     
     //Los bloques son inamovibles
     group.setAll('body.immovable', true);
@@ -77,8 +88,10 @@ function displayScreen(){
 function collisionHandler(obj,group){
     //Si la velocidad es mayor que 500 rompemos el Bloque y disminuimos la velocidad
    if(pj.body.velocity.y>500){
-           group.destroy();
-           pj.body.velocity.y -=700; 
+           group.parent.destroy();
+           pj.body.velocity.y -=700;
+
+           recibirDaño();
    
    }
    //Si no rebotamos
@@ -86,8 +99,10 @@ function collisionHandler(obj,group){
 }
 
 function render(){
-    game.debug.bodyInfo(pj, 332, 32);
+ 
+    //game.debug.bodyInfo(pj, 332, 32);
 }
+
 
 //Leer del JSON para sacar los bloques
 let nivel = JSON.parse(Nivel1);
@@ -98,6 +113,19 @@ let nivel = JSON.parse(Nivel1);
      }
  }
 
+ function recibirDaño(){
+    vidaActual -= 1;
+    if(vidaActual>=1){
+    downTween1 = game.add.tween(vida.scale).to({
+            x: 0.25 *vidaActual,
+            y: 1
+        }, 1500, Phaser.Easing.Cubic.Out);
+        downTween1.start();
+        }
+        else gameOver();
+
+}
+function gameOver(){}
 //Clase para cada bloque en una plataforma.Tipo-3 trampa, tipo-2 = obstáculo, tipo-1 = bloque de letra,
 //tipo 0 = vacio, tipo 1 = bloque normal tipo 2= boost tipo 3 superboost.
 
@@ -133,4 +161,6 @@ class Bloque{
                 break;
         }
     }
+
+    
 }
