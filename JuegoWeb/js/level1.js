@@ -1,6 +1,6 @@
 const PROBABILIDAD_TRAMPA =0; //probabilidad de trampa en una plataforma
 const PROBABILIDAD_OBSTACULO=0; //probabilidad obstaculo en una plataforma
-const VIDA_MÁXIMA=4;
+const VIDA_MÁXIMA=100;
 const BLOQUES_POR_PLATAFORMA = 8;
 const MAX_PLATAFORMAS=0; //nº de plataformas para llegar al suelo
 const PROBABILIDAD_AGUJERO=1/BLOQUES_POR_PLATAFORMA; //probabilidad para un agujero en la plataforma
@@ -26,8 +26,9 @@ var group;
 var cursors;
 var vida;
 let downTween1;
-var vidaActual = 4;
-
+var vidaActual = 100;
+var daño;
+var trampa;
 function loadstartAssets(){
     game.load.image('trampa', 'assets/imgs/trampa.png');
     game.load.image('obstaculo','assets/imgs/obstaculo.png');
@@ -42,6 +43,7 @@ function loadstartAssets(){
 function updateScene(){
     //Deteccion de colision del jugador con algun objeto del grupo de los bloques
      game.physics.arcade.collide(pj, group, null,collisionHandler, this);
+    game.physics.arcade.collide(pj, trampa, colis,choque, this);
 
      //Movimiento
      pj.body.velocity.x = 0;
@@ -58,6 +60,7 @@ function displayScreen(){
     game.physics.startSystem(Phaser.Physics.ARCADE);
     game.add.text(25, 25, " Level1",style);
     vida = game.add.sprite(170,40,"vida");
+    trampa = game.add.sprite(600,450,"trampa");
     vida.anchor.setTo(0, 0.5);
     
         
@@ -73,8 +76,10 @@ function displayScreen(){
     }
 
     //Establecemos las fisicas
-    pj = game.add.sprite(0,300,"boost");
-    game.physics.enable([pj]);
+    pj = game.add.sprite(0,100,"boost");
+    game.physics.enable([pj,trampa]);
+    trampa.enableBody=true;
+    trampa.body.immovable = true; 
     pj.body.collideWorldBounds = true;
     pj.body.bounce.y = 1;
     pj.body.gravity.y = 500;
@@ -85,17 +90,29 @@ function displayScreen(){
 
      cursors = game.input.keyboard.createCursorKeys();
 }
+
+function colis(obj,group){
+
+    daño = pj.body.velocity.y/100;
+     recibirDaño(daño);
+
+}
+
+
 function collisionHandler(obj,group){
     //Si la velocidad es mayor que 500 rompemos el Bloque y disminuimos la velocidad
    if(pj.body.velocity.y>500){
+           daño = pj.body.velocity.y;
+           
            group.parent.destroy();
-           pj.body.velocity.y -=700;
-
-           recibirDaño();
-   
+           pj.body.velocity.y -=700;  
    }
    //Si no rebotamos
    else if( pj.body.velocity.y <= 500) pj.body.velocity.y = +400;
+}
+function choque(obj,trampa){
+    pj.body.velocity.y = +400;
+
 }
 
 function render(){
@@ -113,11 +130,11 @@ let nivel = JSON.parse(Nivel1);
      }
  }
 
- function recibirDaño(){
-    vidaActual -= 1;
-    if(vidaActual>=1){
+ function recibirDaño(daño){
+    vidaActual -= daño*-1;
+    if(vidaActual>=0){
     downTween1 = game.add.tween(vida.scale).to({
-            x: 0.25 *vidaActual,
+            x: vidaActual/100,
             y: 1
         }, 1500, Phaser.Easing.Cubic.Out);
         downTween1.start();
