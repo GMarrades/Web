@@ -37,10 +37,16 @@ function loadstartAssets(){
     game.load.image('normal', 'assets/imgs/normal.png');
     game.load.image('boost', 'assets/imgs/boost.png');
     game.load.image('superboost', 'assets/imgs/superboost.png');
-    game.load.image('vida','assets/imgs/BarraDeVida.png')
+    game.load.image('vida','assets/imgs/BarraDeVida.png');
+    game.world.setBounds(0, 0, 800, 1600);
+   
 }
 
 function updateScene(){
+    game.camera.setSize(800,600);
+    game.camera.bounds = (800 ,1600);
+    game.camera.follow(pj,Phaser.Camera.FOLLOW_TOPDOWN,0.5,0.5);
+    
     //Deteccion de colision del jugador con algun objeto del grupo de los bloques
      game.physics.arcade.collide(pj, group, null,collisionHandler, this);
      game.physics.arcade.collide(pj, trampa, colis,choque, this);
@@ -76,7 +82,7 @@ function displayScreen(){
     }
 
     //Establecemos las fisicas
-    pj = game.add.sprite(0,100,"boost");
+    pj = game.add.sprite(400,100,"boost");
     game.physics.enable([pj,trampa]);
     trampa.enableBody=true;
     trampa.body.immovable = true; 
