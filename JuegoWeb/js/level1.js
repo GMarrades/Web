@@ -95,6 +95,15 @@ function displayScreen(){
     group.setAll('body.immovable', true);
 
      cursors = game.input.keyboard.createCursorKeys();
+    //Leer del JSON para sacar los bloques
+    function leeNivel(){
+        let nivel = []; //el nivel va a ser un array de plataformas, cada plataforma será un array de bloques
+        for (let i = 0; i<19; i++){
+            let plataforma = []; //vamos a ir metiendo plataformas en el nivel como arrays de bloques
+            plataforma = JSON.parse("p"+i);
+            nivel.push(plataforma);
+        }
+    }
 }
 
 
