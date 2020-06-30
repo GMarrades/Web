@@ -2,9 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\assets",
-    "\\assets\\imgs",
-    "\\js"
+    "\\assets\\Levels"
   ],
-  "SelectedNode": "\\assets\\imgs\\BarraDeVida.png",
+  "SelectedNode": "\\assets\\Levels",
   "PreviewInSolutionExplorer": false
 }

@@ -4,25 +4,22 @@ let lvl2State = {
 };
 
 var style = { font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" };
+var level;
+var plataformas;
 
 function loadstartAssets(){
-
+    game.load.text("level", "assets/levels/level1.json");
 }
 
 function displayScreen(){
-    game.add.text(50, 50, " Level2",style);
+
+    plataformas = JSON.parse(game.cache.getText('level'));
+    console.log(plataformas);
 
 }
 
-//Leer del JSON para sacar los bloques
-let NivelDos = JSON.parse("Nivel2");
-let niv2 = [];
- for (let i=0; i<nivel.length; i++){
-     let plataforma = JSON.parse("Nivel2"[i+1]);
-     let plat = [];
-     for(let j = 0; j<plataforma.length; j++){
-        bloque = new Bloque(plataforma[j]);
-        plat.push(bloque);
-     }
-     niv.push(plat);
- }
+
+
+
+
+
