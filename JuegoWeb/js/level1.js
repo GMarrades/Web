@@ -96,14 +96,14 @@ function displayScreen(){
 
      cursors = game.input.keyboard.createCursorKeys();
     //Leer del JSON para sacar los bloques
-    function leeNivel(){
+    /*function leeNivel(){
         let nivel = []; //el nivel va a ser un array de plataformas, cada plataforma será un array de bloques
         for (let i = 0; i<19; i++){
             let plataforma = []; //vamos a ir metiendo plataformas en el nivel como arrays de bloques
             plataforma = JSON.parse("p"+i);
             nivel.push(plataforma);
         }
-    }
+    }*/
 }
 
 
@@ -139,67 +139,3 @@ function render(){
 }
 
 
-//Leer del JSON para sacar los bloques
-let nivel = JSON.parse("Nivel1");
-let niv = [];
- for (let i=0; i<nivel.length; i++){
-     let plataforma = JSON.parse("Nivel1"[i+1]);
-     let plat = [];
-     for(let j = 0; j<plataforma.length; j++){
-        bloque = new Bloque(plataforma[j]);
-        plat.push(bloque);
-     }
-     niv.push(plat);
- }
-
- function recibirDaño(daño){
-    vidaActual -= daño*-1;
-    if(vidaActual>=0){
-    downTween1 = game.add.tween(vida.scale).to({
-            x: vidaActual/100,
-            y: 1
-        }, 1500, Phaser.Easing.Cubic.Out);
-        downTween1.start();
-        }
-        else gameOver();
-
-}
-function gameOver(){}
-//Clase para cada bloque en una plataforma.Tipo-3 trampa, tipo-2 = obstáculo, tipo-1 = bloque de letra,
-//tipo 0 = vacio, tipo 1 = bloque normal tipo 2= boost tipo 3 superboost.
-
-class Bloque{
-    constructor(tipo){
-        this.tipo = tipo;
-        this.letra= fromCharCode(Math.floor(Math.random*(90-65))+65); //65 es el valor A en ASCII, 90 es el valor Z en ASCII
-        this.sprite;
-        switch (this.tipo){
-            case -3:
-                this.sprite ='trampa';
-                break;
-            case -2:
-                this.sprite='obstaculo';
-                break;
-            case -1:
-                this.sprite='letra';
-                break;
-            case 0:
-                this.sprite='vacio';
-                break;
-            case 1:
-                this.sprite='normal';
-                break;
-            case 2:
-                this.sprite='boost';
-                break;
-            case 3:
-                this.sprite='superboost';
-                break;
-            default:
-                this.sprite='normal';
-                break;
-        }
-    }
-
-    
-}
