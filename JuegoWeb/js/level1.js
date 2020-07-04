@@ -45,12 +45,20 @@ function updateScene(){
         jugador.body.velocity.x = 200;
     }
 
+    
+    for (var i = 0, len = grupoGeneral.children.length; i < len; i++) {  
+        if(grupoGeneral.children[i].y < jugador.y) grupoGeneral.children[i].kill();
+    }
+      
+        
 }
 
 function displayScreen(){
     console.log(Math.floor(21/9));
     lista=new Phaser.ArraySet();
     grupoGeneral = game.add.physicsGroup();
+    grupoGeneral.enableBody = true;
+    grupoGeneral.physicsBodyType = Phaser.Physics.ARCADE;
     trampas = game.add.physicsGroup();
    
     game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -68,6 +76,7 @@ function displayScreen(){
     jugador.body.gravity.y = 300;
 
     cursors = game.input.keyboard.createCursorKeys();
+
 }
 
 
