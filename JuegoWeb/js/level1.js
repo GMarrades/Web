@@ -14,6 +14,7 @@ var cursors;
 var jugador;
 var grupoGeneral;
 var trampas;
+var trampasAleatorias;
 var lista;
 var vidaActual = 100;
 var vida;
@@ -21,9 +22,10 @@ var vida;
 function loadstartAssets(){
     game.load.text("level", "assets/levels/level1.json");
     game.load.image('normal', 'assets/imgs/normal.png');
-    game.load.image('trampa', 'assets/imgs/trampa.png');
+    game.load.image('trampa', 'assets/imgs/obstaculo.png');
     game.load.image('boost', 'assets/imgs/boost.png');
     game.load.image('vida', 'assets/imgs/BarraDeVida.png');
+    game.load.image('trampaAleatoria', 'assets/imgs/trampa.png');
     game.world.setBounds(0, 0, 800, 7000);
 }
 
@@ -32,9 +34,9 @@ function updateScene(){
  
     game.physics.arcade.collide(jugador,grupoGeneral, null,colisionesLvl2, this);
 
-    game.physics.arcade.collide(jugador, trampas, colis,choque, this);
+    game.physics.arcade.collide(jugador, trampas, colisPinchos,choque, this);
     
-    
+    game.physics.arcade.collide(jugador, trampasAleatorias, prueba,choque, this);
 
     game.camera.setSize(800,600);
     game.camera.bounds = (800 ,7000);
@@ -46,11 +48,15 @@ function updateScene(){
     {
         for (var i = 0, len = grupoGeneral.children.length; i < len; i++) {  
             grupoGeneral.children[i].body.velocity.x = -400;
-            if(grupoGeneral.children[i].body.x <-80) grupoGeneral.children[i].reset(800, grupoGeneral.children[i].body.y);
+            if(grupoGeneral.children[i].body.x <0) grupoGeneral.children[i].reset(800, grupoGeneral.children[i].body.y);
         }
         for (var j = 0, len = trampas.children.length; j < len; j++) {  
             trampas.children[j].body.velocity.x = -400;
-            if(trampas.children[j].body.x <-80) trampas.children[j].reset(800, trampas.children[j].body.y);
+            if(trampas.children[j].body.x <0) trampas.children[j].reset(800, trampas.children[j].body.y);
+        }
+        for (var j = 0, len = trampasAleatorias.children.length; j < len; j++) {  
+            trampasAleatorias.children[j].body.velocity.x = -400;
+            if(trampasAleatorias.children[j].body.x <0) trampasAleatorias.children[j].reset(800, trampasAleatorias.children[j].body.y);
         }
        
     }
@@ -58,11 +64,15 @@ function updateScene(){
     {
         for (var i = 0, len = grupoGeneral.children.length; i < len; i++) {  
             grupoGeneral.children[i].body.velocity.x = 400;
-            if(grupoGeneral.children[i].body.x >880) grupoGeneral.children[i].reset(0, grupoGeneral.children[i].body.y);
+            if(grupoGeneral.children[i].body.x >800) grupoGeneral.children[i].reset(0, grupoGeneral.children[i].body.y);
         }
         for (var i = 0, len = trampas.children.length; i < len; i++) {  
             trampas.children[i].body.velocity.x = 400;
-            if(trampas.children[i].body.x >880) trampas.children[i].reset(0, trampas.children[i].body.y);
+            if(trampas.children[i].body.x >800) trampas.children[i].reset(0, trampas.children[i].body.y);
+        }
+        for (var i = 0, len = trampasAleatorias.children.length; i < len; i++) {  
+            trampasAleatorias.children[i].body.velocity.x = 400;
+            if(trampasAleatorias.children[i].body.x >800) trampasAleatorias.children[i].reset(0, trampasAleatorias.children[i].body.y);
         }
     }
     else{
@@ -72,6 +82,9 @@ function updateScene(){
         for (var i = 0, len = trampas.children.length; i < len; i++) {  
             trampas.children[i].body.velocity.x = 0;
       }
+      for (var i = 0, len = trampasAleatorias.children.length; i < len; i++) {  
+        trampasAleatorias.children[i].body.velocity.x = 0;
+  }
     }
     
     for (var i = 0, len = grupoGeneral.children.length; i < len; i++) {  
@@ -79,6 +92,9 @@ function updateScene(){
     }
     for (var i = 0, len = trampas.children.length; i < len; i++) {  
         if(trampas.children[i].y < jugador.y) trampas.children[i].kill();
+    }
+    for (var i = 0, len = trampasAleatorias.children.length; i < len; i++) {  
+        if(trampasAleatorias.children[i].y < jugador.y) trampasAleatorias.children[i].kill();
     }
       
         
@@ -96,6 +112,10 @@ function displayScreen(){
     trampas = game.add.physicsGroup();
     trampas.enableBody = true;
     trampas.physicsBodyType = Phaser.Physics.ARCADE;
+
+    trampasAleatorias = game.add.physicsGroup();
+    trampasAleatorias.enableBody = true;
+    trampasAleatorias.physicsBodyType = Phaser.Physics.ARCADE;
    
    
     game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -141,7 +161,13 @@ function  crearPlataformas(plataforma){
       
         if (plataforma.bloques[i].tipo != 0){
         
-            if (plataforma.bloques[i].tipo == 1) grupoGeneral.create((plataforma.bloques[i].x)*80,y,"normal");  
+            if (plataforma.bloques[i].tipo == 1){
+                grupoGeneral.create((plataforma.bloques[i].x)*80,y,"normal");  
+                let rnd = game.rnd.integerInRange(0, 4);
+                if(rnd == 2){
+                    trampasAleatorias.create((plataforma.bloques[i].x)*80,y-25,"trampaAleatoria");  
+                }
+            } 
             if (plataforma.bloques[i].tipo == -1){
         
                 grupoGeneral.create((plataforma.bloques[i].x)*80,y,"normal");
@@ -152,6 +178,8 @@ function  crearPlataformas(plataforma){
         }
     }
     trampas.setAll('body.immovable', true);
+
+    trampasAleatorias.setAll('body.immovable', true);
 }
 
 function colisionesLvl2(obj,group){
@@ -173,16 +201,22 @@ function colisionesLvl2(obj,group){
 
    function render(){
     game.debug.text('Vida: ' + vidaActual , 16, 48);
-    game.debug.bodyInfo(jugador, 332, 32);
+    //game.debug.bodyInfo(jugador, 332, 32);
 }
 
 
-function colis(obj,group){
+function prueba(obj,group){
 
     let velocidad =jugador.body.velocity.y;
     if (velocidad >0) velocidad *=-1;
-    let daño = velocidad/10;
+    let daño = velocidad/20;
+    console.log(daño);
      recibirDaño(daño);
+
+}
+function colisPinchos(obj,group){
+
+     recibirDaño(-10);
 
 }
 
