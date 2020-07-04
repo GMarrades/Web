@@ -242,7 +242,7 @@ function colisionesLvl2(obj,group){
     let posicionColision =Math.floor(grupoGeneral.getChildIndex(group)/9);
     
     //Si la velocidad es mayor que 450 rompemos el Bloque y disminuimos la velocidad
-   if(jugador.body.velocity.y>0){
+   if(jugador.body.velocity.y>450){
            //daño = jugador.body.velocity.y;
            grupoGeneral.removeBetween(posicionColision*9, ((posicionColision+1)*9)-1);
            jugador.body.velocity.y -=300; 
@@ -291,7 +291,7 @@ function recibirDaño(daño){
         }
         else{
             escudo =false;
-            jugador.loadTexture('jugador');
+            jugador.loadTexture('jun');
         }
 }
 
@@ -303,7 +303,7 @@ function terminarNivel1(){
 
 function powerUpEscudo(obj,powerUp){
     escudo =true;
-    jugador.loadTexture('jug');
+    jugador.loadTexture('jugadorEscudo');
     powerUp.destroy();
 }
 
