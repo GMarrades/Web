@@ -33,10 +33,15 @@ function loadstartAssets(){
 //-----------------------------PANTALLA------------------------------//
 //-------------------------------------------------------------------//
 function displayScreen(){
+
+    game.camera.x =0;
+    game.camera.y =0;
+    game.world.setBounds(0, 0, 800, 600);
     game.input.enabled = true;
     game.add.image(0,0,'background');
 
     let textTitle = "Bouncing ball"; //Falta titulo del videojuego este
+    
     let styleTitle = {font:'32px Lexend Tera', fill: '#522E46'};
     
     game.add.text(50, game.world.height/6, textTitle, styleTitle);

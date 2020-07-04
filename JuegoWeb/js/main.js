@@ -6,6 +6,7 @@ let game = new Phaser.Game(GAME_STAGE_WIDTH, GAME_STAGE_HEIGHT, Phaser.CANVAS, '
 // Entry point
 window.onload = startGame;
 
+var pruebass =54;
 function startGame() {
     game.state.add('inicio',initState);
     game.state.add('play',playState);
@@ -15,6 +16,7 @@ function startGame() {
 	game.state.add('player',playerState);
 	game.state.add('level1',lvl1State);
 	game.state.add('level2',lvl2State);
+	game.state.add('endGame',endState);
 	
 
     game.state.start('inicio');
