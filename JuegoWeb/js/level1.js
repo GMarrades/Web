@@ -1,141 +1,130 @@
-const PROBABILIDAD_TRAMPA =0; //probabilidad de trampa en una plataforma
-const PROBABILIDAD_OBSTACULO=0; //probabilidad obstaculo en una plataforma
-const VIDA_MÁXIMA=100;
-const BLOQUES_POR_PLATAFORMA = 8;
-const MAX_PLATAFORMAS=0; //nº de plataformas para llegar al suelo
-const PROBABILIDAD_AGUJERO=1/BLOQUES_POR_PLATAFORMA; //probabilidad para un agujero en la plataforma
-const PROBABILIDAD_POWERUP=0; //probabilidad de powerup en un agujero
-const AUMENTO_VELOCIDAD_POWERUP=0;//velocidad que aumentará el powerup
-//ESTAS CONSTANTES SON SOLO PARA EL LEVEL2
-const PROBABILIDAD_SIN_AGUJEROS=0; //probabilidad para una plataforma sin agujeros
-const PROBABILIDAD_LETRA=0; //probabilidad para un bloque de letras en una plataforma sin agujeros
-const PROBABILIDAD_SUPERPOWERUP=0; //probabilidad de que haya un super power up en un bloque
-const AUMENTO_VELOCIDAD_SUPERPOWERUP=0; //velocidad que aumentará el super power up
-
-
 let lvl1State = {
     preload: loadstartAssets,
     create: displayScreen,
     update: updateScene,
     render: render
 };
-
+const Y_OFFSET = 100;
 var style = { font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" };
-var pj;
-var group;
+var level;
+var plataformas;
 var cursors;
-var vida;
-let downTween1;
-var vidaActual = 100;
-var daño;
-var trampa;
+var jugador;
+var grupoGeneral;
+var trampas;
+var lista;
+
 function loadstartAssets(){
-    game.load.image('trampa', 'assets/imgs/trampa.png');
-    game.load.image('obstaculo','assets/imgs/obstaculo.png');
-    game.load.image('letra', 'assets/imgs/vacio.png');
-    game.load.image('vacio', 'assets/imgs/vacio.png');
+    game.load.text("level", "assets/levels/level1.json");
     game.load.image('normal', 'assets/imgs/normal.png');
+    game.load.image('trampa', 'assets/imgs/trampa.png');
     game.load.image('boost', 'assets/imgs/boost.png');
-    game.load.image('superboost', 'assets/imgs/superboost.png');
-    game.load.image('vida','assets/imgs/BarraDeVida.png');
-    game.world.setBounds(0, 0, 800, 1600);
-   
+    game.world.setBounds(0, 0, 1600, 7000);
 }
 
 function updateScene(){
-    game.camera.setSize(800,600);
-    game.camera.bounds = (800 ,1600);
-    game.camera.follow(pj,Phaser.Camera.FOLLOW_TOPDOWN,0.5,0.5);
-    
-    //Deteccion de colision del jugador con algun objeto del grupo de los bloques
-     game.physics.arcade.collide(pj, group, null,collisionHandler, this);
-     game.physics.arcade.collide(pj, trampa, colis,choque, this);
 
-     //Movimiento
-     pj.body.velocity.x = 0;
+ 
+    game.physics.arcade.collide(jugador,grupoGeneral, null,colisionesLvl2, this);
+    
+    
+   
+
+    game.camera.setSize(800,600);
+    game.camera.bounds = (800 ,7000);
+    game.camera.follow(jugador,Phaser.Camera.FOLLOW_TOPDOWN,0.5,0.5);
+    
+
+    jugador.body.velocity.x = 0;
       if (cursors.left.isDown)
     {
-        pj.body.velocity.x = -200;
+        jugador.body.velocity.x = -200;
     }
     else if (cursors.right.isDown)
     {
-        pj.body.velocity.x = 200;
+        jugador.body.velocity.x = 200;
     }
+
 }
+
 function displayScreen(){
+    console.log(Math.floor(21/9));
+    lista=new Phaser.ArraySet();
+    grupoGeneral = game.add.physicsGroup();
+    trampas = game.add.physicsGroup();
+   
     game.physics.startSystem(Phaser.Physics.ARCADE);
-    game.add.text(25, 25, " Level1",style);
-    vida = game.add.sprite(170,40,"vida");
-    trampa = game.add.sprite(600,450,"trampa");
-    vida.anchor.setTo(0, 0.5);
+    plataformas = JSON.parse(game.cache.getText('level'));
+    console.log(plataformas.platfforms[0]);
+    createPlatforms();
+
+    jugador = game.add.sprite(0,0,"boost");
     
-        
+    grupoGeneral.setAll('body.immovable', true);
+    game.physics.enable([jugador]);
+    jugador.enableBody=true;
+    jugador.body.collideWorldBounds = true;
+    jugador.body.bounce.y = 1;
+    jugador.body.gravity.y = 300;
 
-    //Creamos grupo
-     group = game.add.physicsGroup();
-
-     //Añadimos bloques al grupo
-     for (var i = 0; i < 550; i+=50)
-    {
-        var c = group.create(i, 450, 'normal');
-        
-    }
-
-    //Establecemos las fisicas
-    pj = game.add.sprite(400,100,"boost");
-    game.physics.enable([pj,trampa]);
-    trampa.enableBody=true;
-    trampa.body.immovable = true; 
-    pj.body.collideWorldBounds = true;
-    pj.body.bounce.y = 1;
-    pj.body.gravity.y = 500;
-
-    
-    //Los bloques son inamovibles
-    group.setAll('body.immovable', true);
-
-     cursors = game.input.keyboard.createCursorKeys();
-    //Leer del JSON para sacar los bloques
-    /*function leeNivel(){
-        let nivel = []; //el nivel va a ser un array de plataformas, cada plataforma será un array de bloques
-        for (let i = 0; i<19; i++){
-            let plataforma = []; //vamos a ir metiendo plataformas en el nivel como arrays de bloques
-            plataforma = JSON.parse("p"+i);
-            nivel.push(plataforma);
-        }
-    }*/
+    cursors = game.input.keyboard.createCursorKeys();
 }
 
 
 
 
-function collisionHandler(obj,group){
-    //Si la velocidad es mayor que 500 rompemos el Bloque y disminuimos la velocidad
-   if(pj.body.velocity.y>500){
-           daño = pj.body.velocity.y;
-           
-           group.parent.destroy();
-           pj.body.velocity.y -=700;  
+function createPlatforms(){
+
+    for (let i = 0, max = plataformas.platfforms.length; i < max; i++)
+
+        crearPlataformas(plataformas.platfforms[i]);
+
+    console.log(lista.total);
+}
+
+function  crearPlataformas(plataforma){
+    let y = plataforma.y + Y_OFFSET;
+    let group = game.add.physicsGroup();
+  
+
+    for (let i = 0, max = plataforma.bloques.length; i < max; i++)
+    {
+      
+        if (plataforma.bloques[i].tipo != 0){
+        
+            if (plataforma.bloques[i].tipo == 1) grupoGeneral.create((plataforma.bloques[i].x)*80,y,"normal");  
+            if (plataforma.bloques[i].tipo == -1){
+        
+                grupoGeneral.create((plataforma.bloques[i].x)*80,y,"normal");
+                trampas.create((plataforma.bloques[i].x)*80,y-25,"trampa");
+    
+               
+            }
+        }
+    }
+        group.setAll('body.immovable', true);
+}
+
+function colisionesLvl2(obj,group){
+    let posicionColision =Math.floor(grupoGeneral.getChildIndex(group)/9);
+    console.log(posicionColision)
+    
+    //Si la velocidad es mayor que 450 rompemos el Bloque y disminuimos la velocidad
+   if(jugador.body.velocity.y>450){
+           //daño = jugador.body.velocity.y;
+           console.log("elimina")
+           grupoGeneral.removeBetween(posicionColision*9, ((posicionColision+1)*9)-1);
+           jugador.body.velocity.y -=300; 
    }
    //Si no rebotamos
-   else if( pj.body.velocity.y <= 500) pj.body.velocity.y = +400;
-}
-
-function colis(obj,group){
-
-    daño = pj.body.velocity.y/100;
-     recibirDaño(daño);
+   else if( jugador.body.velocity.y <= 400) jugador.body.velocity.y =200;
 
 }
 
-function choque(obj,trampa){
-    pj.body.velocity.y = +400;
 
-}
-
-function render(){
- 
-    //game.debug.bodyInfo(pj, 332, 32);
+   function render(){
+    game.debug.text('Grupos: ' + grupoGeneral.length , 16, 48);
+    game.debug.bodyInfo(jugador, 332, 32);
 }
 
 

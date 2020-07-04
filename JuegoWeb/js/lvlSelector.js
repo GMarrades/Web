@@ -1,4 +1,15 @@
+//-------------------------------------------------------------------//
+//-----------------------------FONTS---------------------------------//
+//-------------------------------------------------------------------//
+WebFont.load({
+    google: {
+        families: ['Lexend Tera','Lexend Mega','Comfortaa']
+    }
+});
 
+//-------------------------------------------------------------------//
+//---------------------------ASSETS-Y-DEMÁS--------------------------//
+//-------------------------------------------------------------------//
 
 let selectorState = {
     preload: loadstartAssets,
@@ -9,23 +20,37 @@ var btnRestart,btnLVL1,btnLVL2;
 var style = { font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" };
 
 function loadstartAssets(){
-    game.load.image('buttonrRestart', 'assets/imgs/return.png');
-    game.load.image('buttonLVL1', 'assets/imgs/level1.png');
-    game.load.image('buttonLVL2', 'assets/imgs/level2.png');
-
+    game.load.image('buttonrRestart', 'assets/imgs/arrow.png');
+    game.load.image('buttonLVL1', 'assets/imgs/lv1.png');
+    game.load.image('buttonLVL2', 'assets/imgs/lv2.png');
+    game.load.image('buttonLVL3', 'assets/imgs/lv3.png');
+    game.load.image('background', 'assets/imgs/background.png');
 
 }
-
+//-------------------------------------------------------------------//
+//-----------------------------PANTALLA------------------------------//
+//-------------------------------------------------------------------//
 function displayScreen(){
-    game.add.text(50, 50, "Selector de niveles",style);
-    btnRestart = game.add.button(400, 100, 'buttonrRestart', onRetrunPressesd);
-      btnRestart.scale.setTo(0.25);
+    background =game.add.image(0,0,'background');
+    background.opacity = 0.2;
 
-      btnLVL1 = game.add.button(300, 300, 'buttonLVL1', onLevel1Pressed);
-      btnLVL1.scale.setTo(0.25)
+    let titulo = "Elige el nivel:"
+    let tituloText = game.add.text(32, game.world.height/6, titulo,{
+        font:'32px Lexend Tera',
+        fill:'#522E46'
+    });
 
-      btnLVL2 = game.add.button(500, 300, 'buttonLVL2', onLevel2Pressed);
-      btnLVL2.scale.setTo(0.25)
+      btnLVL1 = game.add.button(125, 300, 'buttonLVL1', onLevel1Pressed);
+      btnLVL1.scale.setTo(0.6)
+
+      btnLVL2 = game.add.button(325, 300, 'buttonLVL2', onLevel2Pressed);
+      btnLVL2.scale.setTo(0.6)
+
+      btnLVL3 = game.add.button(550, 300, 'buttonLVL3', onLevel3Pressed);
+      btnLVL3.scale.setTo(0.6)
+    
+      btnRestart = game.add.button(675, 490, 'buttonrRestart', onRetrunPressesd);
+      btnRestart.scale.setTo(0.2);
 
 }
 
@@ -41,5 +66,10 @@ function onLevel1Pressed(){
 
 function onLevel2Pressed(){
     game.state.start("level2");
+   
+}
+
+function onLevel3Pressed(){
+    game.state.start("level3");
    
 }
