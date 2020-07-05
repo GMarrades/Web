@@ -30,6 +30,7 @@ function loadstartAssets(){
     game.load.image('background2', 'assets/imgs/bg.png');
     game.load.image('icono', 'assets/imgs/icon_start.png');
     game.load.image('hero', 'assets/imgs/pg.png');
+    game.load.image('names', 'assets/imgs/names.png');
 }
 //-------------------------------------------------------------------//
 //-----------------------------PANTALLA------------------------------//
@@ -74,7 +75,7 @@ function displayScreen(){
         btnPlayer.anchor.setTo(0.5, 0.5);
         btnPlayer.scale.setTo(0.15);
 
-        btnName = game.add.button(680, 450, 'instructionsButon', onNameButtonPressed);
+        btnName = game.add.button(680, 450, 'names', onNameButtonPressed);
         btnName.anchor.setTo(0.5, 0.5);
         btnName.scale.setTo(0.5);
 }
