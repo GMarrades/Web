@@ -21,7 +21,7 @@ function displayScreen(){
         game.add.text(50, game.world.height/6, "Has completado el nivel" + nivel,{font:'32px Lexend Tera', fill: '#522E46'});
     }
     else{
-        game.add.text(50, game.world.height/6, "No has superado el nivel" + nivel +"    "+ plataformasRestantes);
+        game.add.text(50, game.world.height/6, "No has superado el nivel" + nivel +"   \n "+"Plataformas restantes: "+ plataformasRestantes+ "\n"+"Presiona S para repetir el nivel" );
     }
 
 
