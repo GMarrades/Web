@@ -22,7 +22,7 @@ var letrasArray =[];
 var letrasGroup;
 var valor =0;
 var texto;
-
+var platMoviles;
 
 function loadstartAssets(){
     game.load.text("level2", "assets/levels/level2.json");
@@ -53,6 +53,7 @@ function updateScene(){
 
     game.physics.arcade.collide(jugador2, letrasGroup, null,letrasColli, this);
 
+    game.physics.arcade.collide(jugador2, platMoviles, null,choqueMov, this);
 
 
     game.camera.setSize(800,300);
@@ -72,6 +73,13 @@ function updateScene(){
             letrasGroup.children[j].kill();
             texto.children[j].kill();
         }
+    }
+
+   
+    for (var i = 0, len = platMoviles.children.length; i < len; i++) {  
+       
+        if(platMoviles.children[i].body.x >800) platMoviles.children[i].reset(0, platMoviles.children[i].body.y);
+        platMoviles.children[i].body.velocity.x = 200;
     }
 
       if (cursors.left.isDown)
@@ -100,7 +108,10 @@ function updateScene(){
             texto.children[j].body.velocity.x = -400;
             if(texto.children[j].body.x <0) texto.children[j].reset(800, texto.children[j].body.y);
         }
-       
+        for (var j = 0, len = platMoviles.children.length; j < len; j++) {  
+            platMoviles.children[j].body.velocity.x = -400;
+            if(platMoviles.children[j].body.x <0) platMoviles.children[j].reset(800, platMoviles.children[j].body.y);
+        }
     }
     else if (cursors.right.isDown)
     {
@@ -127,6 +138,10 @@ function updateScene(){
         for (var i = 0, len = texto.children.length; i < len; i++) {  
             texto.children[i].body.velocity.x = 400;
             if(texto.children[i].body.x >800) texto.children[i].reset(0, texto.children[i].body.y);
+        }
+        for (var i = 0, len = platMoviles.children.length; i < len; i++) {  
+            platMoviles.children[i].body.velocity.x = 400;
+            if(platMoviles.children[i].body.x >800) platMoviles.children[i].reset(0, platMoviles.children[i].body.y);
         }
     }
     else{
@@ -171,6 +186,9 @@ for (var i = 0, len = texto.children.length; i < len; i++) {
     for (var i = 0, len = texto.children.length; i < len; i++) {  
         if(texto.children[i].y < jugador2.y) texto.children[i].kill();
     }
+    for (var i = 0, len = platMoviles.children.length; i < len; i++) {  
+        if(platMoviles.children[i].y < jugador2.y) texto.children[i].kill();
+    }
       
     plataformasRestantes = Math.min(plataformasRestantes, 20 - Math.floor((jugador2.body.y-Y_OFFSET) /150));
 
@@ -209,6 +227,10 @@ function displayScreen(){
     texto = game.add.physicsGroup();
     texto.enableBody = true;
     texto.physicsBodyType = Phaser.Physics.ARCADE;
+
+    platMoviles = game.add.physicsGroup();
+    platMoviles.enableBody = true;
+    platMoviles.physicsBodyType = Phaser.Physics.ARCADE;
    
    
     game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -297,6 +319,11 @@ function  crearPlataformas2(plataforma){
             game.add.text(((plataforma.bloques[i].x)*80+25),y, letras.charAt(rnd),styleTitle, texto);
             letrasGroup.setAll('body.immovable', true);
         }
+        if (plataforma.bloques[i].tipo == -3){
+          let plat= platMoviles.create(((plataforma.bloques[i].x)*80),y-5,"fin"); 
+           grupoGeneral2.create((plataforma.bloques[i].x)*80,y,"normal"); 
+           platMoviles.setAll('body.immovable', true);
+        }
     }
     trampas2.setAll('body.immovable', true);
 
@@ -320,7 +347,7 @@ function colisionesLvl(obj,group){
 
    function render(){
     game.debug.text('Plataformas restantes: ' + plataformasRestantes , 500  , 35);
-    game.debug.bodyInfo(jugador2, 100, 32);
+    //game.debug.bodyInfo(jugador2, 100, 32);
 }
 
 
@@ -367,7 +394,7 @@ function powerUpEscudo2(obj,powerUp){
     powerUp.destroy();
     jugador2.body.acceleration.y = 600;
     console.log( jugador2.body.velocity.y + "eeeeeeeeeeeey");
-    game.time.events.add(Phaser.Timer.SECOND * 5, eliminarPowerUp, this);
+    game.time.events.add(Phaser.Timer.SECOND * 3, eliminarPowerUp, this);
 
 }
 
@@ -377,4 +404,17 @@ function eliminarPowerUp(){
 
 function letrasColli(){
     jugador2.body.velocity.y = 200;
+}
+
+function letrasColli(obj){
+    jugador2.body.velocity.y = 200;
+    
+}
+
+function choqueMov(obj,trampa){
+    
+    jugador2.body.velocity.y = 200;
+    trampa.destroy();
+    recibirDaño2(-10);
+    console.log("asdasdasdbdfyyj");
 }
