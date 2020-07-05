@@ -291,7 +291,7 @@ function recibirDaño(daño){
         }
         else{
             escudo =false;
-            jugador.loadTexture('jun');
+            jugador.loadTexture('jug');
         }
 }
 
