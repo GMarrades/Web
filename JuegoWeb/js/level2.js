@@ -35,6 +35,7 @@ function loadstartAssets(){
     game.load.image('fin', 'assets/imgs/fin.png');
     game.load.image('escudo', 'assets/imgs/boost.png');
     game.load.image('jugadorEscudo', 'assets/imgs/pgEscudo.png');
+    game.load.image('vacio', 'assets/imgs/vacio.png');
     game.world.setBounds(0, 0, 800, 3300);
 }
 
@@ -200,13 +201,16 @@ for (var i = 0, len = texto.children.length; i < len; i++) {
 }
 
 function displayScreen(){
-    console.log(pruebass);
+   
+    nivelActual =2;
     vida2 = game.add.sprite(25,25,"vida");
     vida2.fixedToCamera = true;
     grupoGeneral2 = game.add.physicsGroup();
     grupoGeneral2.enableBody = true;
     grupoGeneral2.physicsBodyType = Phaser.Physics.ARCADE;
     
+    powerActivo = game.add.sprite(640,540,'vacio');
+    powerActivo.fixedToCamera = true;
 
     trampas2 = game.add.physicsGroup();
     trampas2.enableBody = true;
@@ -346,7 +350,10 @@ function colisionesLvl(obj,group){
 
 
    function render(){
-    game.debug.text('Plataformas restantes: ' + plataformasRestantes , 500  , 35);
+    game.debug.text('Plataformas restantes: ' + plataformasRestantes , 25  , 580);
+    game.debug.text("Nivel: " + nivelActual, 300  , 580);
+    game.debug.text(nombre, 550  , 35);
+    game.debug.text("Power Up Activo: " , 500  , 580);
     //game.debug.bodyInfo(jugador2, 100, 32);
 }
 
@@ -393,13 +400,15 @@ function terminarNivel2(){
 function powerUpEscudo2(obj,powerUp){
     powerUp.destroy();
     jugador2.body.acceleration.y = 600;
-    console.log( jugador2.body.velocity.y + "eeeeeeeeeeeey");
+    powerActivo.loadTexture('boost');
+
     game.time.events.add(Phaser.Timer.SECOND * 3, eliminarPowerUp, this);
 
 }
 
 function eliminarPowerUp(){
     jugador2.body.acceleration.y = 0;
+    powerActivo.loadTexture('vacio');
 }
 
 function letrasColli(){
@@ -416,5 +425,4 @@ function choqueMov(obj,trampa){
     jugador2.body.velocity.y = 200;
     trampa.destroy();
     recibirDaño2(-10);
-    console.log("asdasdasdbdfyyj");
 }

@@ -14,8 +14,8 @@ let initState = {
     preload: loadstartAssets,
     create: displayScreen
 };
-
-let btnPlayer, btnAbout, btnInstructions, btnLvl;
+var nombre ="";
+let btnPlayer, btnAbout, btnInstructions, btnLvl, btnName;
 
 let rojo = '#FF5733';
 let morado = '#522E46';
@@ -73,12 +73,22 @@ function displayScreen(){
     btnPlayer = game.add.button(780, 30, 'playButton', onPlayerButtonPressed);
         btnPlayer.anchor.setTo(0.5, 0.5);
         btnPlayer.scale.setTo(0.15);
+
+        btnName = game.add.button(680, 450, 'instructionsButon', onNameButtonPressed);
+        btnName.anchor.setTo(0.5, 0.5);
+        btnName.scale.setTo(0.5);
 }
 function onAboutButtonPressed(){
     game.state.start("about");
 }
+function onNameButtonPressed(){
+    game.state.start("nameSelector");
+}
 function onLvlButtonPressed(){
-    game.state.start("lvlSelector");
+    if(nombre != "" ){
+        game.state.start("lvlSelector");
+    }
+    else alert("Please select a name");
 }
 function onInstructionsButtonPressed(){
     game.state.start("instrucciones");

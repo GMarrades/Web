@@ -17,6 +17,7 @@ function startGame() {
 	game.state.add('level1',lvl1State);
 	game.state.add('level2',lvl2State);
 	game.state.add('endGame',endState);
+	game.state.add('nameSelector',nameState);
 	
 
     game.state.start('inicio');

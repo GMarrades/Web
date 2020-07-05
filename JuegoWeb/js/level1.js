@@ -24,6 +24,8 @@ var final;
 var escudo=false;
 var nivel;
 var exito;
+var nivelActual;
+var powerActivo;
 
 function loadstartAssets(){
     game.load.text("level", "assets/levels/level1.json");
@@ -37,6 +39,7 @@ function loadstartAssets(){
     game.load.image('escudo', 'assets/imgs/escudo.png');
     game.load.image('jugadorEscudo', 'assets/imgs/pgEscudo.png');
     game.load.image('background', 'assets/imgs/bgnivel.png');
+    game.load.image('vacio', 'assets/imgs/vacio.png');
     game.world.setBounds(0, 0, 800, 3300);
 }
 
@@ -140,8 +143,15 @@ function updateScene(){
 
 function displayScreen(){
     background =game.add.image(0,0,'background');
+    nivelActual = 1;
     console.log(pruebass);
     vida = game.add.sprite(25,25,"vida");
+
+    
+    powerActivo = game.add.sprite(640,560,'vacio');
+    powerActivo.fixedToCamera = true;
+    game.world.bringToTop(powerActivo);
+
     vida.fixedToCamera = true;
     lista=new Phaser.ArraySet();
     grupoGeneral = game.add.physicsGroup();
@@ -256,8 +266,12 @@ function colisionesLvl2(obj,group){
 
 
    function render(){
-    game.debug.text('Plataformas restantes: ' + plataformasRestantes , 500  , 35);
-    //game.debug.bodyInfo(jugador, 332, 32);
+    game.debug.text('Plataformas restantes: ' + plataformasRestantes , 25  , 580);
+    game.debug.text("Nivel: " + nivelActual, 300  , 580);
+    game.debug.text("Power Up Activo: " , 500  , 580);
+    game.debug.text(nombre, 550  , 35);
+    //game.debug.bodyInfo(jugador, 332, 32);(sprite, 32, 32);
+   
 }
 
 
@@ -294,6 +308,7 @@ function recibirDaño(daño){
         else{
             escudo =false;
             jugador.loadTexture('jug');
+            powerActivo.loadTexture('vacio');
         }
 }
 
@@ -307,5 +322,6 @@ function powerUpEscudo(obj,powerUp){
     escudo =true;
     jugador.loadTexture('jugadorEscudo');
     powerUp.destroy();
+    powerActivo.loadTexture('escudo');
+  
 }
-
