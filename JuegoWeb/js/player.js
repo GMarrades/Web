@@ -25,8 +25,9 @@ var btnRestart;
 
 function loadstartAssets(){
     game.load.image('buttonrRestart', 'assets/imgs/arrow.png');
-    game.load.image('background', 'assets/imgs/pg0.png');
-
+    game.load.image('background', 'assets/imgs/background.png');
+    game.load.image('hero', 'assets/imgs/pg0.png');
+    
 }
 //-------------------------------------------------------------------//
 //-----------------------------PANTALLA------------------------------//
