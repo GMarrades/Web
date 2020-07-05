@@ -25,7 +25,8 @@ function loadstartAssets(){
     game.load.image('buttonLVL2', 'assets/imgs/lv2.png');
     game.load.image('buttonLVL3', 'assets/imgs/lv3.png');
     game.load.image('background', 'assets/imgs/background.png');
-
+    game.load.image('hero', 'assets/imgs/pg.png');
+    game.load.image('hero1', 'assets/imgs/pg0.png');
 }
 //-------------------------------------------------------------------//
 //-----------------------------PANTALLA------------------------------//
@@ -51,6 +52,15 @@ function displayScreen(){
     
       btnRestart = game.add.button(675, 490, 'buttonrRestart', onRetrunPressesd);
       btnRestart.scale.setTo(0.2);
+
+    let hero1 = game.add.sprite(0, 450, 'hero', 4);
+    hero1.anchor.setTo(0.5, 0.5);
+    hero1.scale.setTo(2);
+
+    mainTween = game.add.tween(hero1).to({x: 800, angle:1080},2000, Phaser.Easing.Linear.None)
+
+    mainTween.loop(true);
+    mainTween.start();
 
 }
 

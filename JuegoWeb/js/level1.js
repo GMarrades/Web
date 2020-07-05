@@ -36,6 +36,7 @@ function loadstartAssets(){
     game.load.image('fin', 'assets/imgs/fin.png');
     game.load.image('escudo', 'assets/imgs/escudo.png');
     game.load.image('jugadorEscudo', 'assets/imgs/pgEscudo.png');
+    game.load.image('background', 'assets/imgs/bgnivel.png');
     game.world.setBounds(0, 0, 800, 3300);
 }
 
@@ -138,6 +139,7 @@ function updateScene(){
 }
 
 function displayScreen(){
+    background =game.add.image(0,0,'background');
     console.log(pruebass);
     vida = game.add.sprite(25,25,"vida");
     vida.fixedToCamera = true;

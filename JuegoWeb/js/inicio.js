@@ -28,6 +28,8 @@ function loadstartAssets(){
     game.load.image('playButton', 'assets/imgs/configure.png');
     game.load.image('background', 'assets/imgs/background.png');
     game.load.image('background2', 'assets/imgs/bg.png');
+    game.load.image('icono', 'assets/imgs/icon_start.png');
+    game.load.image('hero', 'assets/imgs/pg.png');
 }
 //-------------------------------------------------------------------//
 //-----------------------------PANTALLA------------------------------//
@@ -39,6 +41,16 @@ function displayScreen(){
     game.world.setBounds(0, 0, 800, 600);
     game.input.enabled = true;
     game.add.image(0,0,'background');
+
+    let hero1 = game.add.sprite(game.world.width / 4, game.world.height - 200, 'hero', 4);
+    hero1.anchor.setTo(0.5, 0.5);
+    hero1.scale.setTo(3);
+
+    mainTween = game.add.tween(hero1).to({y: 250},600, Phaser.Easing.Linear.None)
+    .to({y: game.world.height - 200 }, 600, Phaser.Easing.Linear.None);
+
+    mainTween.loop(true);
+    mainTween.start();
 
     let textTitle = "Bouncing ball"; //Falta titulo del videojuego este
     
